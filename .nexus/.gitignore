@@ -1,0 +1,8 @@
+logs/
+*.log
+cache/
+tmp/
+*.key
+*.token
+auth.json
+credentials.json

@@ -1,0 +1,12 @@
+node_modules/
+*.log
+.DS_Store
+.env
+.env.*
+!.env.example
+.nexus/logs/
+.nexus/cache/
+.nexus/tmp/
+auth.json
+*.key
+*.pem

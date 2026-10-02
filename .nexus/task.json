@@ -1,0 +1,22 @@
+{
+  "id": "task-0048",
+  "title": "diseña un sistema de autenticación JWT",
+  "description": "diseña un sistema de autenticación JWT",
+  "status": "PENDING",
+  "priority": "NORMAL",
+  "category": "GENERAL",
+  "profile": "CODER",
+  "engine": null,
+  "agent": null,
+  "model": null,
+  "mode": "BALANCED",
+  "risk": "LOW",
+  "complexity": "LOW",
+  "created": "2026-10-02T00:25:48.950Z",
+  "updated": "2026-10-02T00:25:48.951Z",
+  "files": [],
+  "dependencies": [],
+  "result": null,
+  "errors": [],
+  "durationMs": 0
+}

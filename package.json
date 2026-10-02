@@ -1,0 +1,25 @@
+{
+  "name": "nexus-ai-lab",
+  "version": "2.0.0",
+  "description": "Hybrid AI Agent Orchestration Lab for Antigravity, OpenCode & Open Source Models",
+  "type": "module",
+  "main": "src/cli/index.js",
+  "bin": {
+    "nexus": "./bin/nexus.js"
+  },
+  "scripts": {
+    "test": "node tests/runner.js",
+    "doctor": "node bin/nexus.js doctor"
+  },
+  "keywords": [
+    "ai",
+    "orchestrator",
+    "agents",
+    "opencode",
+    "gemini",
+    "antigravity",
+    "git-safety"
+  ],
+  "author": "Nexus AI Lab",
+  "license": "MIT"
+}

@@ -1,0 +1,36 @@
+{
+  "version": "2.0.0",
+  "default_engine": "opencode",
+  "default_mode": "ECONOMY",
+  "budget_mode": "GUARD",
+  "autonomy_mode": "SAFE",
+  "preferred_agents": {
+    "ARCHITECT": "gemini",
+    "CODER": "build",
+    "DEBUGGER": "build",
+    "TESTER": "build",
+    "REVIEWER": "general",
+    "RESEARCHER": "explore",
+    "DOCUMENTATION": "general",
+    "SECURITY": "general",
+    "DEVOPS": "general"
+  },
+  "preferred_models": {
+    "opencode": "opencode/big-pickle",
+    "gemini": "Gemini 3.8 Flash",
+    "local": "auto"
+  },
+  "max_retries": 2,
+  "git_strategy": "branch",
+  "parallel_tasks": 2,
+  "logging": {
+    "level": "INFO",
+    "directory": ".nexus/logs"
+  },
+  "telemetry": true,
+  "permissions": {
+    "destructive_commands_block": true,
+    "require_confirmation_for_large_diff": true,
+    "max_auto_files_changed": 10
+  }
+}

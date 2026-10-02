@@ -1,0 +1,23 @@
+{
+  "id": "task-0001",
+  "title": "crea una función sencilla de suma en utils.js y sus pruebas en utils.test.js",
+  "description": "crea una función sencilla de suma en utils.js y sus pruebas en utils.test.js",
+  "status": "RUNNING",
+  "priority": "NORMAL",
+  "category": "TEST",
+  "profile": "TESTER",
+  "engine": "opencode",
+  "agent": "build",
+  "model": "opencode/big-pickle",
+  "mode": "ECONOMY",
+  "risk": "LOW",
+  "complexity": "LOW",
+  "created": "2026-10-02T00:21:52.201Z",
+  "updated": "2026-10-02T00:21:56.352Z",
+  "files": [],
+  "dependencies": [],
+  "result": null,
+  "errors": [],
+  "durationMs": 0,
+  "branch": "nexus/task-0001"
+}
