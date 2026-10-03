@@ -17,7 +17,7 @@ export async function showDashboard() {
   console.log(`║  Engines:                                                      ║`);
   console.log(`║    • OpenCode:   \x1b[32m${oc.available ? `ONLINE (v${oc.version})` : 'OFFLINE'}\x1b[0m`);
   console.log(`║    • Gemini:     \x1b[32mONLINE (Antigravity Bridge)\x1b[0m                  ║`);
-  console.log(`║    • Local AI:   \x1b[33mSTANDBY\x1b[0m                                       ║`);
+  console.log(`║    • Local AI:   \x1b[90mDISABLED (RAM Protection: 8GB limit)\x1b[0m         ║`);
   console.log('║                                                                ║');
   console.log(`║  Git Status:                                                   ║`);
   console.log(`║    • Branch:     ${git.branch || 'None (no repo)'}`);

@@ -8,14 +8,15 @@ export class LocalAdapter extends BaseEngine {
   async detect() {
     return {
       available: false,
-      reason: 'No active local OpenAI-compatible endpoint (Ollama/LM Studio) detected on localhost:11434 or localhost:1234.'
+      reason: 'Soporte de modelos locales deshabilitado: La máquina anfitriona cuenta con recursos limitados (8 GB RAM / 4 núcleos). Para evitar sobrecarga de memoria o congelamiento del sistema, toda ejecución económica se delega a OpenCode.'
     };
   }
 
   async health() {
     return {
-      status: 'STANDBY',
-      engine: 'local'
+      status: 'DISABLED',
+      engine: 'local',
+      reason: 'Host RAM Protection (8 GB limit preserved)'
     };
   }
 
@@ -28,7 +29,7 @@ export class LocalAdapter extends BaseEngine {
   }
 
   async execute() {
-    throw new Error('Local engine is in STANDBY. Launch Ollama or LM Studio to enable local execution.');
+    throw new Error('El motor Local está deshabilitado por política de protección de hardware (8 GB RAM). Utiliza OpenCode.');
   }
 
   async cancel() {
@@ -41,7 +42,8 @@ export class LocalAdapter extends BaseEngine {
       supportsToolCalls: false,
       supportsStreaming: false,
       supportsSubagents: false,
-      supportsLocal: true
+      supportsLocal: false,
+      disabled: true
     };
   }
 }

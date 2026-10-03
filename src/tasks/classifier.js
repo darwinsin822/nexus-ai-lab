@@ -3,6 +3,7 @@ export const TASK_CATEGORIES = [
   'DEBUG',
   'TEST',
   'REFACTOR',
+  'PLANNING',
   'ARCHITECTURE',
   'RESEARCH',
   'DOCUMENTATION',
@@ -34,6 +35,24 @@ export class TaskClassifier {
         complexity: 'HIGH',
         profile: 'ARCHITECT',
         risk: 'MEDIUM'
+      };
+    }
+
+    // Planning / Task breakdown
+    if (
+      text.includes('planifica') ||
+      text.includes('plan ') ||
+      text.startsWith('plan') ||
+      text.includes('roadmap') ||
+      text.includes('plan de trabajo') ||
+      text.includes('desglose de tareas') ||
+      text.includes('planea')
+    ) {
+      return {
+        category: 'PLANNING',
+        complexity: 'MEDIUM',
+        profile: 'PLANNER',
+        risk: 'LOW'
       };
     }
 

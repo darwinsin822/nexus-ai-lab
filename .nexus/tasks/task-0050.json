@@ -1,0 +1,22 @@
+{
+  "id": "task-0050",
+  "title": "Test task execution",
+  "description": "Desc",
+  "status": "PENDING",
+  "priority": "NORMAL",
+  "category": "GENERAL",
+  "profile": "CODER",
+  "engine": "opencode",
+  "agent": null,
+  "model": null,
+  "mode": "ECONOMY",
+  "risk": "LOW",
+  "complexity": "LOW",
+  "created": "2026-10-03T00:22:12.758Z",
+  "updated": "2026-10-03T00:22:12.759Z",
+  "files": [],
+  "dependencies": [],
+  "result": null,
+  "errors": [],
+  "durationMs": 0
+}

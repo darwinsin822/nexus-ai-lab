@@ -74,7 +74,8 @@ export async function runDoctor() {
     check('Antigravity Bridge', 'WARN', 'Operating in standalone CLI mode');
   }
 
-  // 6. Skills
+  // Local AI Policy
+  check('Local Models Policy', 'OK', 'DISABLED (Preserving 8 GB host RAM; all low-cost tasks delegated to OpenCode)');
   try {
     const skills = skillsLoader.listSkills();
     check('Skills Subsystem', 'OK', `${skills.length} skills detected (local & global)`);

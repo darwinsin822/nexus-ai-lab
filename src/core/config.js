@@ -8,7 +8,8 @@ export const DEFAULT_CONFIG = {
   budget_mode: 'GUARD',         // Strict protection against unnecessary Gemini consumption
   autonomy_mode: 'SAFE',        // SAFE, AUTO, FULL
   preferred_agents: {
-    ARCHITECT: 'gemini',
+    ARCHITECT: 'plan',
+    PLANNER: 'plan',
     CODER: 'build',
     DEBUGGER: 'build',
     TESTER: 'build',
@@ -20,8 +21,7 @@ export const DEFAULT_CONFIG = {
   },
   preferred_models: {
     opencode: 'opencode/big-pickle',
-    gemini: 'Gemini 3.8 Flash',
-    local: 'auto'
+    gemini: 'Gemini 3.8 Flash'
   },
   max_retries: 2,
   git_strategy: 'branch',       // 'branch', 'worktree', 'checkpoint'

@@ -211,28 +211,49 @@ export async function cli(args = process.argv.slice(2)) {
     }
 
     case 'plan': {
-      const prompt = args.slice(1).join(' ');
+      let prompt = '';
+      let engine = null;
+      for (let i = 1; i < args.length; i++) {
+        if (args[i] === '--engine' && args[i + 1]) {
+          engine = args[++i];
+        } else {
+          prompt += (prompt ? ' ' : '') + args[i];
+        }
+      }
+
       if (!prompt) {
-        console.error('Usage: nexus plan "<prompt>"');
+        console.error('Usage: nexus plan "<prompt>" [--engine opencode|gemini]');
         process.exit(1);
       }
+
       initProjectStructure();
-      const task = taskManager.createTask(prompt, prompt, { mode: 'BALANCED' });
-      logger.info(`Generating architectural plan for [${task.id}]...`);
-      const plan = await geminiAdapter.execute(task, { model: 'gemini/gemini-3.8-flash' });
-      handoffManager.writeArtifact('plan.md', plan.stdout);
+      const config = loadConfig();
+      const targetEngine = engine || (config.default_mode === 'ECONOMY' ? 'opencode' : 'gemini');
+      const task = taskManager.createTask(prompt, prompt, { mode: 'BALANCED', engine: targetEngine });
+      logger.info(`Generating architectural plan for [${task.id}] with ${targetEngine}...`);
+
+      let planText = '';
+      if (targetEngine === 'opencode') {
+        const res = await opencodeAdapter.execute(task, { agent: 'plan', model: 'opencode/big-pickle', auto: true });
+        planText = res.stdout || `# Plan generado por OpenCode (Agente: plan)\nTarea: ${prompt}\n`;
+      } else {
+        const plan = await geminiAdapter.execute(task, { model: 'gemini/gemini-3.8-flash' });
+        planText = plan.stdout;
+      }
+
+      handoffManager.writeArtifact('plan.md', planText);
       handoffManager.createHandoff(
-        { engine: 'gemini', agent: 'self' },
+        { engine: targetEngine, agent: targetEngine === 'opencode' ? 'plan' : 'self' },
         { engine: 'opencode', agent: 'build' },
         {
           stage: 'PLAN_TO_IMPLEMENT',
           objective: prompt,
-          plan: plan.stdout,
+          plan: planText,
           task
         }
       );
-      console.log('\n' + plan.stdout);
-      logger.success('Plan generated and saved to .nexus/plan.md & .nexus/handoff.md');
+      console.log('\n' + planText);
+      logger.success('Plan generado y guardado en .nexus/plan.md & .nexus/handoff.md');
       break;
     }
 

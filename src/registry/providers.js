@@ -38,21 +38,13 @@ export class ProviderRegistry {
       status: 'ACTIVE'
     });
 
-    // Local AI check
-    let localAvailable = false;
-    try {
-      execSync('which ollama', { stdio: 'ignore' });
-      localAvailable = true;
-    } catch (e) {
-      localAvailable = false;
-    }
-
+    // Local AI is disabled due to hardware limits (8 GB RAM / 4 cores)
     providers.push({
       id: 'local',
       name: 'Local AI (Ollama / LM-Studio)',
-      configured: localAvailable,
+      configured: false,
       credentialsCount: 0,
-      status: localAvailable ? 'STANDBY' : 'NOT_FOUND'
+      status: 'DISABLED (RAM Protection: 8GB limit)'
     });
 
     return providers;

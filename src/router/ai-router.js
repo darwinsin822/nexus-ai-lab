@@ -20,13 +20,16 @@ export class AIRouter {
     let engine = requestedEngine || task.engine;
     let reason = '';
 
-    // If no engine was explicitly requested, apply capacity & cost routing
-    if (!engine) {
+    // If local engine requested, reject due to hardware constraints
+    if (engine === 'local') {
+      engine = 'opencode';
+      reason = 'Soporte local deshabilitado por restricción de hardware (8 GB RAM / 4 núcleos). Enrutado a OpenCode.';
+    } else if (!engine) {
       if (mode === 'PREMIUM') {
         engine = 'gemini';
         reason = 'Mode PREMIUM: Prioritizing maximum cognitive and reasoning power.';
       } else if (mode === 'ECONOMY' || mode === 'BALANCED') {
-        const bgEvaluation = budgetGuard.evaluate(task, classification.category, classification.complexity);
+        const bgEvaluation = budgetGuard.evaluate(task, classification.category, classification.complexity, mode);
         if (bgEvaluation.allowed) {
           engine = 'gemini';
           reason = bgEvaluation.reason;

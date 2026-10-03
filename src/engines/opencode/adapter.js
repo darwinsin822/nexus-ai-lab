@@ -25,7 +25,7 @@ export class OpenCodeAdapter extends BaseEngine {
     try {
       const output = execSync(`${this.cliPath} --version`, {
         encoding: 'utf8',
-        timeout: 10000
+        timeout: 30000
       }).trim();
       const version = output.split('\n')[0].trim();
       return {
@@ -37,14 +37,14 @@ export class OpenCodeAdapter extends BaseEngine {
     } catch (err) {
       // Check if npx is available
       try {
-        const npxVer = execSync('npx --yes opencode-ai --version', {
+        const npxVer = execSync('npx --yes --prefer-offline opencode-ai --version', {
           encoding: 'utf8',
-          timeout: 15000
+          timeout: 30000
         }).trim().split('\n')[0].trim();
         return {
           available: true,
           version: npxVer,
-          binary: 'npx --yes opencode-ai',
+          binary: 'npx --yes --prefer-offline opencode-ai',
           type: 'npx-cli'
         };
       } catch (npxErr) {
@@ -72,7 +72,7 @@ export class OpenCodeAdapter extends BaseEngine {
     try {
       const output = execSync(`${this.cliPath} agent list`, {
         encoding: 'utf8',
-        timeout: 15000
+        timeout: 30000
       });
       const lines = output.split('\n');
       const agents = [];
