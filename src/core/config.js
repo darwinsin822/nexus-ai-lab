@@ -20,6 +20,12 @@ export const DEFAULT_CONFIG = {
     DEVOPS: 'general'
   },
   preferred_models: {
+    PLANNER: 'opencode/big-pickle',
+    DOCUMENTATION: 'opencode/muse-spark-1.3-contributor-free',
+    CODER: 'opencode/nemotron-3.5-lightning-free',
+    DEBUGGER: 'opencode/nemotron-3.5-lightning-free',
+    TESTER: 'opencode/ling-3.0-flash-free',
+    RESEARCHER: 'opencode/hy3-free',
     opencode: 'opencode/big-pickle',
     gemini: 'Gemini 3.8 Flash'
   },

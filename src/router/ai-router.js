@@ -52,7 +52,8 @@ export class AIRouter {
     const model = await modelRegistry.selectBestModel({
       engine,
       mode,
-      category: classification.category
+      category: classification.category,
+      role: classification.profile
     });
 
     // Risk Analysis

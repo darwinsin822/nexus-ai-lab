@@ -75,22 +75,35 @@ export class ModelRegistry {
   async selectBestModel(options = {}) {
     const mode = options.mode || 'ECONOMY';
     const engine = options.engine || 'opencode';
+    const role = (options.role || options.profile || '').toUpperCase();
+    const category = (options.category || '').toUpperCase();
 
     if (engine === 'gemini') {
       return mode === 'PREMIUM' ? 'gemini/gemini-2.5-pro' : 'gemini/gemini-3.8-flash';
     }
 
-    if (mode === 'ECONOMY') {
-      // Prioritize free opencode models or lowest cost
+    if (mode === 'ECONOMY' || mode === 'BALANCED') {
+      // Role-specific open source models from OpenCode catalog
+      if (role === 'PLANNER' || role === 'ARCHITECT' || category === 'PLANNING' || category === 'ARCHITECTURE') {
+        return 'opencode/big-pickle';
+      }
+      if (role === 'DOCUMENTATION' || category === 'DOCUMENTATION') {
+        return 'opencode/muse-spark-1.3-contributor-free';
+      }
+      if (role === 'TESTER' || category === 'TEST') {
+        return 'opencode/ling-3.0-flash-free';
+      }
+      if (role === 'CODER' || role === 'DEBUGGER' || category === 'CODE' || category === 'DEBUG') {
+        return 'opencode/nemotron-3.5-lightning-free';
+      }
+      if (role === 'RESEARCHER' || category === 'RESEARCH') {
+        return 'opencode/hy3-free';
+      }
+
+      // Default fallback to free opencode models
       const free = await this.getFreeModels();
       const opencodeDefault = free.find(m => m.id === 'opencode/big-pickle') || free[0];
       return opencodeDefault ? opencodeDefault.id : 'opencode/big-pickle';
-    }
-
-    if (mode === 'BALANCED') {
-      const econ = await this.getEconomicalModels();
-      const balanced = econ.find(m => m.tool_call) || econ[0];
-      return balanced ? balanced.id : 'opencode/big-pickle';
     }
 
     // PREMIUM

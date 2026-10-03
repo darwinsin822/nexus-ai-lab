@@ -25,11 +25,19 @@ export async function testRouter() {
   assert.strictEqual(evalArch.allowed, true, 'Budget Guard must allow architecture on Gemini in BALANCED');
   console.log('✔ [PASS] Budget Guard permits high-level architecture on Gemini');
 
-  // Test 5: Router defaults to OpenCode for routine code tasks in ECONOMY
+  // Test 5: Router defaults to OpenCode for routine code tasks in ECONOMY with specialized model
   const route1 = await aiRouter.route({ title: 'crea una función de validación de email' }, null, 'ECONOMY');
   assert.strictEqual(route1.engine, 'opencode', 'Routine task must route to OpenCode in ECONOMY');
   assert.strictEqual(route1.agent, 'build', 'Coder profile must map to OpenCode build agent');
-  console.log('✔ [PASS] AI Router selects OpenCode for routine code in ECONOMY');
+  assert.strictEqual(route1.model, 'opencode/nemotron-3.5-lightning-free', 'Coder profile maps to fast coding open-source model');
+  console.log('✔ [PASS] AI Router selects OpenCode with Nemotron 3.5 for routine code in ECONOMY');
+
+  // Test 5.1: Router assigns Big Pickle to Planning and Muse Spark to Documentation
+  const routePlan = await aiRouter.route({ title: 'planifica el roadmap del proyecto' }, null, 'ECONOMY');
+  assert.strictEqual(routePlan.model, 'opencode/big-pickle', 'Planning routes to Big Pickle');
+  const routeDoc = await aiRouter.route({ title: 'crea la documentación técnica y el README' }, null, 'ECONOMY');
+  assert.strictEqual(routeDoc.model, 'opencode/muse-spark-1.3-contributor-free', 'Documentation routes to Muse Spark');
+  console.log('✔ [PASS] Specialized OpenCode models correctly assigned (Big Pickle -> Plan, Muse -> Docs)');
 
   // Test 6: Router selects Gemini in PREMIUM mode
   const route2 = await aiRouter.route({ title: 'crea una función de validación' }, null, 'PREMIUM');
