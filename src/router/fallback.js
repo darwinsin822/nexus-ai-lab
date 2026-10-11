@@ -36,6 +36,28 @@ export class FallbackEngine {
   }
 
   /**
+   * Detects if an error is caused by Gemini 5-hour window, rate limit, or quota exhaustion
+   */
+  isGeminiRateLimited(errorText) {
+    if (!errorText) return false;
+    const str = String(errorText).toLowerCase();
+    return (
+      str.includes('resource_exhausted') ||
+      str.includes('resourceexhausted') ||
+      str.includes('quota exceeded') ||
+      str.includes('quota metric') ||
+      str.includes('queries per day') ||
+      str.includes('queries per minute') ||
+      str.includes('gemini 5-hour') ||
+      str.includes('gemini limit') ||
+      str.includes('rate limit') ||
+      str.includes('429') ||
+      str.includes('credits exhausted') ||
+      str.includes('usage limit')
+    );
+  }
+
+  /**
    * Executes task with automatic fallback, failover, and escalation
    */
   async executeWithFallback(task, routingDecision, options = {}) {
@@ -44,7 +66,7 @@ export class FallbackEngine {
     let currentAgent = routingDecision.agent;
     let currentModel = routingDecision.model;
     let lastError = null;
-    let failoverOccurred = false;
+    let failoverOccurred = null;
 
     while (attempt <= this.maxRetries) {
       attempt++;
@@ -61,14 +83,15 @@ export class FallbackEngine {
         } else if (currentEngine === 'gemini') {
           result = await geminiAdapter.execute(task, {
             agent: currentAgent,
-            model: currentModel
+            model: currentModel,
+            simulate5HourLimit: options.simulateGemini5HourLimit || options.simulate5HourLimit
           });
         } else if (currentEngine === 'claude') {
           result = await claudeAdapter.execute(task, {
             agent: currentAgent,
             model: currentModel,
             cwd: options.cwd,
-            simulate5HourLimit: options.simulate5HourLimit
+            simulate5HourLimit: options.simulateClaude5HourLimit || options.simulate5HourLimit
           });
         } else {
           throw new Error(`Unsupported execution engine: ${currentEngine}`);
@@ -79,11 +102,7 @@ export class FallbackEngine {
             ...result,
             attempts: attempt,
             escalated: currentEngine !== routingDecision.engine,
-            failover: failoverOccurred ? {
-              from: 'claude',
-              to: 'deepseek/deepseek-flash',
-              reason: 'Claude 5-hour limit exhausted: Resumed seamlessly by DeepSeek'
-            } : null
+            failover: failoverOccurred || null
           };
         }
 
@@ -94,10 +113,57 @@ export class FallbackEngine {
         logger.warn(`Attempt ${attempt} threw exception: ${lastError}`);
       }
 
+      // 🚨 AUTOMATIC GEMINI 5-HOUR / QUOTA LIMIT FAILOVER TO DEEPSEEK
+      if (currentEngine === 'gemini' && (this.isGeminiRateLimited(lastError) || options.simulateGemini5HourLimit)) {
+        logger.warn(`[NEXUS AUTO-FAILOVER] ⏳ Límite de 5 horas / cuota de Gemini detectado. Activando relevo automático a DeepSeek...`);
+        failoverOccurred = {
+          from: 'gemini',
+          to: 'deepseek/deepseek-flash',
+          reason: 'Gemini 5-hour quota limit exhausted: Resumed seamlessly by DeepSeek'
+        };
+
+        // 1. Snapshot de emergencia del estado actual de Git y modificaciones
+        const cwd = options.cwd || process.cwd();
+        const diff = gitSafety.getDiff(cwd);
+        const status = gitSafety.getStatus(cwd);
+        handoffManager.createHandoff(
+          { engine: 'gemini', agent: currentAgent || 'self' },
+          { engine: 'opencode', agent: 'build' },
+          {
+            stage: 'GEMINI_5H_FAILOVER_TO_DEEPSEEK',
+            objective: `Continuar y finalizar la tarea asignada tras agotamiento de límite de 5 horas de Gemini: ${task.title || task.description}`,
+            decisions: `Gemini alcanzó el límite de cuota/5 horas. Nexus congela el estado, preserva diffs y delega a DeepSeek para completar el 100% de los requerimientos.`,
+            filesModified: status.modifiedFiles || [],
+            testResults: 'Pendiente de finalización por DeepSeek',
+            nextSteps: 'Retomar la tarea desde el último checkpoint y finalizar la implementación al 100% sin interrupción.'
+          }
+        );
+
+        // 2. Conmutar a DeepSeek vía OpenCode
+        currentEngine = 'opencode';
+        currentAgent = 'build';
+        currentModel = 'deepseek/deepseek-flash';
+        task.failover = {
+          triggered: true,
+          from: 'gemini',
+          to: 'deepseek/deepseek-flash',
+          reason: 'Límite de 5 horas / cuota de Gemini alcanzado',
+          timestamp: new Date().toISOString()
+        };
+
+        logger.info(`[NEXUS FAILOVER] DeepSeek (${currentModel}) asume la tarea para completar el 100% de los requerimientos de Gemini.`);
+        // Reintentar inmediatamente con DeepSeek
+        continue;
+      }
+
       // 🚨 AUTOMATIC CLAUDE 5-HOUR LIMIT FAILOVER TO DEEPSEEK
-      if (currentEngine === 'claude' || this.isClaudeRateLimited(lastError)) {
+      if (currentEngine === 'claude' || (currentEngine !== 'gemini' && this.isClaudeRateLimited(lastError))) {
         logger.warn(`[NEXUS AUTO-FAILOVER] ⏳ Límite de 5 horas de Claude detectado. Activando relevo automático a DeepSeek...`);
-        failoverOccurred = true;
+        failoverOccurred = {
+          from: 'claude',
+          to: 'deepseek/deepseek-flash',
+          reason: 'Claude 5-hour limit exhausted: Resumed seamlessly by DeepSeek'
+        };
 
         // 1. Snapshot de emergencia del estado actual de Git y modificaciones
         const cwd = options.cwd || process.cwd();

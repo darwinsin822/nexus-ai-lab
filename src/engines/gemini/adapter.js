@@ -41,6 +41,18 @@ export class GeminiAdapter extends BaseEngine {
   async execute(task, options = {}) {
     const startTime = Date.now();
     const model = options.model || 'gemini/gemini-3.8-flash';
+
+    // Check if simulate or real Gemini rate limit / 5-hour window exhaustion
+    if (task.mockRateLimit || options.simulate5HourLimit) {
+      return {
+        success: false,
+        exitCode: 429,
+        error: 'RESOURCE_EXHAUSTED: Gemini 5-hour usage limit reached. Quota exceeded for metric Queries.',
+        rateLimited: true,
+        durationMs: Date.now() - startTime
+      };
+    }
+
     logger.info(`Executing with Gemini Architecture/Planning Engine [${model}]...`, {
       taskId: task.id,
       engine: 'gemini'

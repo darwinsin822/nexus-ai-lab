@@ -75,5 +75,23 @@ export async function testRouter() {
   assert.strictEqual(failoverRes.failover?.to, 'deepseek/deepseek-flash', 'Failover target must be DeepSeek');
   console.log('✔ [PASS] Automatic Claude -> DeepSeek failover completes task successfully');
 
+  // Test 11: Gemini 5-hour / quota limit detector
+  assert.strictEqual(fallbackEngine.isGeminiRateLimited('RESOURCE_EXHAUSTED: Gemini 5-hour usage limit reached'), true);
+  assert.strictEqual(fallbackEngine.isGeminiRateLimited('Quota exceeded for quota metric Queries and limit Queries per day'), true);
+  assert.strictEqual(fallbackEngine.isGeminiRateLimited('Compilation error at line 42'), false);
+  console.log('✔ [PASS] Gemini 5-hour / quota limit detector triggers accurately');
+
+  // Test 12: Failover execution simulates Gemini 5-hour limit and continues on DeepSeek
+  const failoverGeminiTask = { id: 'task-gemini-test', title: 'tarea interrumpida en Gemini' };
+  const failoverGeminiRes = await fallbackEngine.executeWithFallback(failoverGeminiTask, {
+    engine: 'gemini',
+    agent: 'self',
+    model: 'gemini/gemini-3.8-flash'
+  }, { simulateGemini5HourLimit: true });
+  assert.strictEqual(failoverGeminiRes.success, true, 'Task must succeed after Gemini failover');
+  assert.strictEqual(failoverGeminiRes.failover?.from, 'gemini', 'Failover origin must be gemini');
+  assert.strictEqual(failoverGeminiRes.failover?.to, 'deepseek/deepseek-flash', 'Failover target must be DeepSeek');
+  console.log('✔ [PASS] Automatic Gemini -> DeepSeek failover completes task successfully');
+
   return true;
 }

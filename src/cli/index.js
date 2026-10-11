@@ -344,10 +344,12 @@ export async function cli(args = process.argv.slice(2)) {
     }
 
     case 'resume':
-    case 'claude-failover': {
-      console.log('\n--- NEXUS RESCUE: CLAUDE 5-HOUR LIMIT FAILOVER TO DEEPSEEK ---');
+    case 'failover':
+    case 'claude-failover':
+    case 'gemini-failover': {
+      console.log('\n--- NEXUS RESCUE: 5-HOUR LIMIT / QUOTA FAILOVER TO DEEPSEEK ---');
       const handoff = handoffManager.readArtifact('handoff.md');
-      const prompt = args.slice(1).join(' ') || (handoff ? 'Continuar la tarea interrumpida de Claude según .nexus/handoff.md' : 'Continuar tarea pendiente con DeepSeek');
+      const prompt = args.slice(1).join(' ') || (handoff ? 'Continuar la tarea interrumpida según .nexus/handoff.md' : 'Continuar tarea pendiente con DeepSeek');
       console.log(`[NEXUS RESCUE] Activando DeepSeek (deepseek/deepseek-flash)...`);
       const res = await opencodeAdapter.execute({ id: `resume-${Date.now()}`, title: prompt }, {
         agent: 'build',
