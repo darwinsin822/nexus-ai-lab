@@ -298,11 +298,48 @@ export async function cli(args = process.argv.slice(2)) {
     }
 
     case 'skills': {
+      const subCmd = args[1];
+      if (subCmd === 'find' || subCmd === 'search') {
+        const query = args.slice(2).join(' ') || '';
+        console.log(`\nSearching community skills via skills.sh for: "${query}"...`);
+        const { spawnSync } = await import('node:child_process');
+        spawnSync('npx', ['skills', 'find', query], { stdio: 'inherit' });
+        break;
+      }
       const skills = skillsLoader.listSkills();
       console.log(`\n=== SKILLS (${skills.length} detected) ===`);
       for (const s of skills) {
         console.log(`  • \x1b[36m${s.name.padEnd(20)}\x1b[0m [${s.scope}] (${s.path})`);
       }
+      console.log('\nTip: To discover new open skills without installing: nexus skills find <query>');
+      break;
+    }
+
+    case 'scan': {
+      console.log('\n--- NEXUS STATIC SECURITY AUDIT (SEMGREP SAST) ---');
+      const { execSync } = await import('node:child_process');
+      try {
+        const out = execSync('semgrep scan --config auto', { stdio: 'inherit' });
+      } catch (err) {
+        // Exit code might be non-zero if issues found
+      }
+      break;
+    }
+
+    case 'test:e2e': {
+      const targetUrl = args[1] || 'http://localhost:3000';
+      console.log(`\n--- NEXUS E2E TEST (PLAYWRIGHT WITH OPTIRAM GUARD) ---`);
+      const { playwrightRunner } = await import('../testing/playwright-runner.js');
+      const result = await playwrightRunner.runScenario(targetUrl);
+      console.log('Result:', JSON.stringify(result, null, 2));
+      break;
+    }
+
+    case 'reverse': {
+      const target = args.slice(1).join(' ');
+      console.log(`\n--- NEXUS REVERSE ENGINEERING (REA v6.4.0) ---`);
+      const { spawnSync } = await import('node:child_process');
+      spawnSync('npx', ['rea-agents', ...args.slice(1)], { stdio: 'inherit' });
       break;
     }
 
@@ -351,9 +388,12 @@ Commands:
   plan <prompt>            Generate architectural plan (Gemini)
   hybrid <prompt>          Execute full Plan->Implement->Test->Review pipeline
   handoff                  View current handoff context document
+  scan                     Run Semgrep SAST deterministic static security scan
+  test:e2e [url]           Run Playwright headless scenario with OptiRAM protection
+  reverse [args...]        Reverse engineer application/binary/APK with REA
+  skills [find <query>]    List active skills or search skills.sh registry
   dashboard                Display interactive terminal dashboard
   memory [file]            Inspect project persistent memory files
-  skills                   List all active local & universal skills
   opencode [args...]       Execute command directly via OpenCode adapter
   gemini [prompt]          Execute prompt directly via Gemini adapter
   history / logs           Show telemetry and resource consumption report

@@ -77,6 +77,43 @@ export class QualityGate {
       });
     }
 
+    // 5. Semgrep Static Security Scan (SAST)
+    if (!process.env.NEXUS_TESTING) {
+      try {
+        const semgrepOutput = execSync('semgrep scan --config auto --json --quiet 2>/dev/null || true', {
+          cwd,
+          encoding: 'utf8',
+          timeout: 25000
+        });
+        if (semgrepOutput && semgrepOutput.includes('"results":')) {
+          const report = JSON.parse(semgrepOutput);
+          const errors = report.results?.filter(r => r.extra?.severity === 'ERROR') || [];
+          const warnings = report.results?.filter(r => r.extra?.severity === 'WARNING') || [];
+          if (errors.length > 0) {
+            checks.push({
+              name: 'Semgrep SAST Security Scan',
+              status: 'FAIL',
+              details: `Detected ${errors.length} security vulnerabilities: ${errors.map(e => e.check_id).join(', ')}`
+            });
+          } else if (warnings.length > 0) {
+            checks.push({
+              name: 'Semgrep SAST Security Scan',
+              status: 'WARN',
+              details: `Detected ${warnings.length} security warnings: ${warnings.map(w => w.check_id).join(', ')}`
+            });
+          } else {
+            checks.push({
+              name: 'Semgrep SAST Security Scan',
+              status: 'PASS',
+              details: 'Zero vulnerabilities detected by Semgrep SAST ($0 token cost)'
+            });
+          }
+        }
+      } catch (e) {
+        // Non-blocking if semgrep is not reachable
+      }
+    }
+
     // Overall verdict
     const hasFail = checks.some(c => c.status === 'FAIL');
     const hasWarn = checks.some(c => c.status === 'WARN');
