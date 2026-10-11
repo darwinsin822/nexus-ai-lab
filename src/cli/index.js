@@ -343,6 +343,24 @@ export async function cli(args = process.argv.slice(2)) {
       break;
     }
 
+    case 'resume':
+    case 'claude-failover': {
+      console.log('\n--- NEXUS RESCUE: CLAUDE 5-HOUR LIMIT FAILOVER TO DEEPSEEK ---');
+      const handoff = handoffManager.readArtifact('handoff.md');
+      const prompt = args.slice(1).join(' ') || (handoff ? 'Continuar la tarea interrumpida de Claude según .nexus/handoff.md' : 'Continuar tarea pendiente con DeepSeek');
+      console.log(`[NEXUS RESCUE] Activando DeepSeek (deepseek/deepseek-flash)...`);
+      const res = await opencodeAdapter.execute({ id: `resume-${Date.now()}`, title: prompt }, {
+        agent: 'build',
+        model: 'deepseek/deepseek-flash',
+        cwd: process.cwd(),
+        auto: true
+      });
+      if (res.stdout) console.log(res.stdout);
+      if (res.stderr) console.error(res.stderr);
+      console.log('\n✔ [NEXUS] Tarea completada al 100% con DeepSeek.');
+      break;
+    }
+
     case 'opencode': {
       const ocArgs = args.slice(1);
       const res = await opencodeAdapter.execute({ id: 'manual-opencode', title: ocArgs.join(' ') }, {

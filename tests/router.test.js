@@ -56,5 +56,24 @@ export async function testRouter() {
   assert.strictEqual(route3.permissions.requireConfirmation, true, 'DANGEROUS task requires confirmation');
   console.log('✔ [PASS] Risk router flags dangerous operations');
 
+  // Test 9: Claude 5-hour rate limit detector
+  const { fallbackEngine } = await import('../src/router/fallback.js');
+  assert.strictEqual(fallbackEngine.isClaudeRateLimited('Claude 5-hour limit exceeded. Resets in 3 hours.'), true);
+  assert.strictEqual(fallbackEngine.isClaudeRateLimited('HTTP 429: Usage limit reached'), true);
+  assert.strictEqual(fallbackEngine.isClaudeRateLimited('Generic syntax error'), false);
+  console.log('✔ [PASS] Claude 5-hour limit detector triggers accurately');
+
+  // Test 10: Failover execution simulates Claude limit and continues on DeepSeek
+  const failoverTask = { id: 'task-claude-test', title: 'tarea interrumpida en Claude' };
+  const failoverRes = await fallbackEngine.executeWithFallback(failoverTask, {
+    engine: 'claude',
+    agent: 'claude-code',
+    model: 'claude/claude-sonnet-4-6'
+  }, { simulate5HourLimit: true });
+  assert.strictEqual(failoverRes.success, true, 'Task must succeed after failover');
+  assert.strictEqual(failoverRes.failover?.from, 'claude', 'Failover origin must be claude');
+  assert.strictEqual(failoverRes.failover?.to, 'deepseek/deepseek-flash', 'Failover target must be DeepSeek');
+  console.log('✔ [PASS] Automatic Claude -> DeepSeek failover completes task successfully');
+
   return true;
 }
