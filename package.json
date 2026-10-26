@@ -1,7 +1,7 @@
 {
   "name": "nexus-ai-lab",
-  "version": "2.0.0",
-  "description": "Hybrid AI Agent Orchestration Lab for Antigravity, OpenCode & Open Source Models",
+  "version": "3.0.0",
+  "description": "Hybrid AI Agent Orchestration Lab for Antigravity, OpenCode 2.x & DeepSeek-First Architecture",
   "type": "module",
   "main": "src/cli/index.js",
   "bin": {
@@ -15,11 +15,14 @@
     "ai",
     "orchestrator",
     "agents",
+    "deepseek",
     "opencode",
     "gemini",
+    "claude",
     "antigravity",
-    "git-safety"
+    "git-safety",
+    "failover"
   ],
-  "author": "Nexus AI Lab",
+  "author": "DarwinSin",
   "license": "MIT"
 }

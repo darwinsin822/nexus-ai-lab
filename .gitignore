@@ -7,6 +7,15 @@ node_modules/
 .nexus/logs/
 .nexus/cache/
 .nexus/tmp/
+.nexus/tasks/
+.nexus/context/
+.nexus/changes/
+.nexus/handoff.md
+.nexus/task.json
+.nexus/plan.md
+.nexus/execution.md
+.nexus/review.md
 auth.json
 *.key
 *.pem
+

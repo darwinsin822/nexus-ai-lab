@@ -10,7 +10,7 @@ import { findNexusRoot } from '../core/config.js';
 
 export async function runDoctor() {
   console.log('\n======================================================');
-  console.log('       NEXUS AI LAB 2.0 — DIAGNOSTIC DOCTOR');
+  console.log('       NEXUS AI LAB 3.0 — DIAGNOSTIC DOCTOR');
   console.log('======================================================\n');
 
   const report = [];

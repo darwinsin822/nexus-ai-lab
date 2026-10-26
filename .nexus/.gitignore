@@ -2,6 +2,14 @@ logs/
 *.log
 cache/
 tmp/
+tasks/
+context/
+changes/
+handoff.md
+task.json
+plan.md
+execution.md
+review.md
 *.key
 *.token
 auth.json
