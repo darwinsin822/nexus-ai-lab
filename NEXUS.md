@@ -1,4 +1,4 @@
-# NEXUS AI LAB 2.0 — COMPENDIO TÉCNICO
+# NEXUS AI LAB 3.0 — COMPENDIO TÉCNICO
 
 ## Visión General
 Nexus AI Lab unifica el ecosistema de IA para desarrollo local en Linux Mint / Ubuntu, operando como router, gestor de tareas, capa de seguridad y puente entre modelos propietarios de alta capacidad y herramientas open-source.

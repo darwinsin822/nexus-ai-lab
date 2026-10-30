@@ -26,12 +26,4 @@ Ubicadas en `skills/`:
 - `research/SKILL.md`
 - `devops/SKILL.md`
 
-## Integración con Skills Globales
 
-Nexus detecta automáticamente las skills configuradas en el entorno del usuario (`~/.gemini/config/skills/`), incluyendo:
-- `zeus`: Supervisor y root-cause debugger.
-- `apolo`: Arquitecto y optimizador de software.
-- `atenea`: Orquestación y planificación sistemática.
-- `afrodita-qa`: Testing adversarial y TDD.
-- `tortugas-ninjas`: Escuadrón de ingeniería multi-rol.
-- `optiram`: Contención de memoria y optimización de recursos.

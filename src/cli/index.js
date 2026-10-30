@@ -335,14 +335,6 @@ export async function cli(args = process.argv.slice(2)) {
       break;
     }
 
-    case 'reverse': {
-      const target = args.slice(1).join(' ');
-      console.log(`\n--- NEXUS REVERSE ENGINEERING (REA v6.4.0) ---`);
-      const { spawnSync } = await import('node:child_process');
-      spawnSync('npx', ['rea-agents', ...args.slice(1)], { stdio: 'inherit' });
-      break;
-    }
-
     case 'resume':
     case 'failover':
     case 'claude-failover':
@@ -410,7 +402,6 @@ Commands:
   handoff                  View current handoff context document
   scan                     Run Semgrep SAST deterministic static security scan
   test:e2e [url]           Run Playwright headless scenario with OptiRAM protection
-  reverse [args...]        Reverse engineer application/binary/APK with REA
   skills [find <query>]    List active skills or search skills.sh registry
   dashboard                Display interactive terminal dashboard
   memory [file]            Inspect project persistent memory files

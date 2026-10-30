@@ -242,8 +242,6 @@ nexus scan                    # Auditoría SAST con Semgrep (AST estático local
 # Testing y Verificación E2E (OptiRAM Guard)
 nexus test:e2e <url>          # Ejecución Headless Playwright acotada en memoria
 
-# Ingeniería Inversa y Análisis de APKs / Binarios / Web
-nexus reverse <comando/args>  # REA v6.4.0 (reconstrucción JS/Electron, APK resources, ADB)
 
 # Búsqueda quirúrgica de skills comunitarias
 nexus skills find <query>     # Buscar en skills.sh bajo demanda sin instalar en bloque

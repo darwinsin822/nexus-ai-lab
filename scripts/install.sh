@@ -26,9 +26,8 @@ echo "✔ Binario nexus enlazado en $LOCAL_BIN/nexus"
 # 3. Instalar skills de Antigravity si existe ~/.gemini/config/skills/
 AG_SKILLS="$HOME/.gemini/config/skills"
 if [ -d "$AG_SKILLS" ]; then
-  mkdir -p "$AG_SKILLS/nexus-ai-lab" "$AG_SKILLS/solution-navigator"
+  mkdir -p "$AG_SKILLS/nexus-ai-lab"
   cp -u "$PROJECT_DIR/skills/nexus-ai-lab/SKILL.md" "$AG_SKILLS/nexus-ai-lab/SKILL.md" 2>/dev/null || true
-  cp -u "$PROJECT_DIR/skills/solution-navigator/SKILL.md" "$AG_SKILLS/solution-navigator/SKILL.md" 2>/dev/null || true
   echo "✔ Skills de Antigravity instaladas en $AG_SKILLS"
 fi
 

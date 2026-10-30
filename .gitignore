@@ -19,3 +19,6 @@ auth.json
 *.key
 *.pem
 
+
+# Estado y telemetría local de Nexus
+.nexus/

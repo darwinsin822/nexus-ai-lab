@@ -111,10 +111,6 @@ export async function runDoctor() {
     check('Context7 MCP', opencodeJson ? 'OK' : 'WARN', opencodeJson ? 'Active via OpenCode remote MCP (mcp.context7.com)' : 'Not configured');
   } catch (e) {}
 
-  try {
-    check('Reverse Engineering', 'OK', 'REA v6.4.0 active (JS/Electron/APK decompilation & ADB hooks)');
-  } catch (e) {}
-
   // 8. Git Safety
   const gitStatus = gitSafety.getStatus();
   if (gitStatus.isRepo) {
