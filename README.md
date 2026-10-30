@@ -112,6 +112,12 @@ ESTADO:           ✔ COMPLETADO CON ÉXITO
 ===================================================
 ```
 
+<p align="center">
+  <img src="assets/nexus-execution-report.jpg" alt="NEXUS Execution Report en Antigravity IDE" width="850">
+  <br>
+  <em>Captura real: Demostración de ejecución y preservación del 100% de créditos con Nexus en Antigravity IDE</em>
+</p>
+
 ### B. Desde la Terminal (CLI Global `nexus`)
 
 ```bash
