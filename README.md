@@ -1,11 +1,11 @@
 # ⚡ NEXUS AI LAB 3.0
-### Orquestación Híbrida con OpenCode 2.x en Antigravity IDE · Ahorro Determinista de Tokens y Créditos
+### Orquestación Híbrida con OpenCode 2.x en Google Antigravity 2.0 · Ahorro Determinista de Tokens y Créditos
 
-**NEXUS AI Lab 3.0** es un motor ligero de orquestación de agentes construido en **Node.js ES Modules nativos (0 dependencias npm externas)** para **Linux** y **Antigravity IDE**. Su propósito central es delegar la ejecución pesada de código, pruebas y refactorización a **OpenCode CLI 2.x (`deepseek/deepseek-flash` / `deepseek-chat`)**, preservando hasta el **90% de tus tokens y créditos** en Claude y Gemini y evitando bloqueos por la ventana rodante de cuota de 5 horas.
+**NEXUS AI Lab 3.0** es un motor ligero de orquestación de agentes construido en **Node.js ES Modules nativos (0 dependencias npm externas)** para **Linux** y **Google Antigravity 2.0**. Su propósito central es delegar la ejecución pesada de código, pruebas y refactorización a **OpenCode CLI 2.x (`deepseek/deepseek-flash` / `deepseek-chat`)**, preservando hasta el **90% de tus tokens y créditos** en Claude y Gemini y evitando bloqueos por la ventana rodante de cuota de 5 horas.
 
 ## 💡 El Problema Real y la Arquitectura de Ahorro
 
-Cuando desarrollas dentro de Antigravity IDE con modelos premium (Claude o Gemini), dos cuellos de botella frenan el flujo de trabajo:
+Cuando desarrollas dentro de Google Antigravity 2.0 con modelos premium (Claude o Gemini), dos cuellos de botella frenan el flujo de trabajo:
 1. **Agotamiento prematuro de créditos en tareas mecánicas:** Generar *boilerplate*, suites de pruebas unitarias, refactorizaciones y documentación consume miles de tokens de alto costo.
 2. **Interrupción por límite de cuota (Ventana de 5 horas / HTTP `429`):** Las sesiones largas se cortan a mitad de una implementación compleja, dejando cambios incompletos en el árbol de trabajo.
 
@@ -44,7 +44,7 @@ cd nexus-ai-lab
 *El script realiza tres acciones limpias en tu usuario actual (`$HOME`):*
 1. Crea o actualiza el wrapper ejecutable de OpenCode 2.x en `~/.local/bin/opencode`.
 2. Enlaza simbólicamente `bin/nexus.js` en `~/.local/bin/nexus`.
-3. Si detecta Antigravity IDE (`~/.gemini/config/skills`), instala automáticamente la skill universal `nexus-ai-lab/SKILL.md`.
+3. Si detecta Google Antigravity 2.0 (`~/.gemini/config/skills`), instala automáticamente la skill universal `nexus-ai-lab/SKILL.md`.
 
 ### 3. Configurar tu API Key de DeepSeek
 Exporta tu clave en `~/.bashrc` o `~/.zshrc`:
@@ -86,7 +86,7 @@ NEXUS AI LAB 3.0 — DIAGNOSTIC DOCTOR
 
 ### A. Dentro del IDE de Antigravity (Delegación Directa a OpenCode)
 
-Escribe la palabra clave `"nexus"` en cualquier instrucción dentro del chat de Antigravity IDE. La skill instalada interceptará la orden para delegar el trabajo pesado a OpenCode CLI + DeepSeek sin gastar los créditos de tu sesión principal:
+Escribe la palabra clave `"nexus"` en cualquier instrucción dentro del chat de Google Antigravity 2.0. La skill instalada interceptará la orden para delegar el trabajo pesado a OpenCode CLI + DeepSeek sin gastar los créditos de tu sesión principal:
 
 > **Prompt en Antigravity:** `"nexus, implementa un middleware de autenticación JWT con rate-limiting y sus pruebas unitarias"`
 
@@ -113,9 +113,9 @@ ESTADO:           ✔ COMPLETADO CON ÉXITO
 ```
 
 <p align="center">
-  <img src="assets/nexus-execution-report.jpg" alt="NEXUS Execution Report en Antigravity IDE" width="850">
+  <img src="assets/nexus-execution-report.jpg" alt="NEXUS Execution Report en Google Antigravity 2.0" width="850">
   <br>
-  <em>Captura real: Demostración de ejecución y preservación del 100% de créditos con Nexus en Antigravity IDE</em>
+  <em>Captura real: Demostración de ejecución y preservación del 100% de créditos con Nexus en Google Antigravity 2.0</em>
 </p>
 
 ### B. Desde la Terminal (CLI Global `nexus`)
@@ -165,11 +165,11 @@ nexus-ai-lab/
 ├── bin/
 │   └── nexus.js            # Punto de entrada ejecutable CLI (Node.js ESM)
 ├── scripts/
-│   ├── install.sh          # Instalador idempotente para Linux y Antigravity IDE
+│   ├── install.sh          # Instalador idempotente para Linux y Google Antigravity 2.0
 │   ├── doctor.sh           # Verificador rápido de dependencias del sistema
 │   └── uninstall.sh        # Desinstalador limpio de enlaces y skills
 ├── skills/
-│   ├── nexus-ai-lab/       # Skill principal para invocar OpenCode desde Antigravity IDE
+│   ├── nexus-ai-lab/       # Skill principal para invocar OpenCode desde Google Antigravity 2.0
 │   └── ...                 # Skills modulares de dominio (backend, frontend, git, testing, security)
 ├── src/
 │   ├── cli/                # Controlador CLI (index.js, doctor.js, dashboard.js)
